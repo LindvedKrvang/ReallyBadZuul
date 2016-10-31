@@ -55,6 +55,9 @@ public class Game
         office.setExits("west", lab);
         office.setExits("down", cellar);
         cellar.setExits("up", office);
+        
+        office.setItem("Computer", 2);
+        pub.setItem("Chair", 3);
 
         currentRoom = outside;  // start game outside
     }

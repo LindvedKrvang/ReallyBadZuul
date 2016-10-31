@@ -22,6 +22,8 @@ public class Room
 
     private String description;
     private HashMap<String, Room> exits;
+    private Item item;
+    private boolean itemInRoom = false;
 
     /**
      * Create a room described "description". Initially, it has no exits.
@@ -43,6 +45,17 @@ public class Room
     public void setExits(String direction, Room neighbor)
     {
         exits.put(direction, neighbor);
+    }
+    
+    /**
+     * Define the Item in the room.
+     * @param description The description as a String.
+     * @param weight The weight as an int.
+     */
+    public void setItem(String description, int weight)
+    {
+        item = new Item(description, weight);
+        itemInRoom = true;
     }
     
     /**
@@ -87,6 +100,13 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "You are " + description + "\n" + getExitString();
+        String longDescription;
+        longDescription = "You are " + description + "\n" + getExitString();
+        if(itemInRoom)
+        {
+            longDescription += "\nThere's a " + item.getDescription() 
+                    + " in the room. \nIt weights " + item.getWeight() + " kg.";
+        }
+        return longDescription;
     }
 }
