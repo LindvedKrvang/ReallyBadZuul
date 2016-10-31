@@ -62,4 +62,13 @@ public class Parser
             return new Command(null, word2); 
         }
     }
+    
+    /**
+     * Gets the list with all commands in it as a String from CommandWords.
+     * @return ALl commands in a String.
+     */
+    public String showCommands()
+    {
+        return commands.getCommandList();
+    }
 }
