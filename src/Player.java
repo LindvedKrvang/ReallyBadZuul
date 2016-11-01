@@ -81,4 +81,13 @@ public class Player
         }
         return itemRemoved;
     }
+    
+    /**
+     * Get the inventory of the player.
+     * @return The inventory as a List.
+     */
+    public List<Item> getInventory()
+    {
+        return inventory;
+    }
 }

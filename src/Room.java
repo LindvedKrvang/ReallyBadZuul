@@ -70,6 +70,7 @@ public class Room
     public void addItem(Item itemToAdd)
     {
         items.add(itemToAdd);
+        itemInRoom = true;
     }
     
     /**
@@ -135,6 +136,10 @@ public class Room
     {
         String longDescription;
         longDescription = "You are " + description + "\n" + getExitString();
+        if(items.isEmpty())
+        {
+            itemInRoom = false;
+        }
         if(itemInRoom)
         {
             longDescription += "\n\nYou see some items:";
@@ -145,5 +150,14 @@ public class Room
             }            
         }
         return longDescription;
+    }
+    
+    /**
+     * Checks if there is an item in the Room.
+     * @return True if yes. False if no.
+     */
+    public boolean itemInRoom()
+    {
+        return itemInRoom;
     }
 }
