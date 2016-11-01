@@ -28,7 +28,7 @@ public class Game
      */
     public Game()
     {
-        player = new Player("Rasmus");
+        player = new Player("Rasmus", 10);
         createRooms();
         parser = new Parser();
     }
@@ -60,9 +60,9 @@ public class Game
         office.setExits("down", cellar);
         cellar.setExits("up", office);
 
-        office.createItem("Computer", "A state of the art computer", 2);
-        pub.createItem("Chair", "A solid, but used chair", 3);
-        pub.createItem("DartGame", "There is lots of holes in the wall next to it", 1);
+        office.createItem("computer", "A state of the art computer", 2);
+        pub.createItem("chair", "A solid, but used chair", 3);
+        pub.createItem("dartgame", "There is lots of holes in the wall next to it", 1);
 
         player.setCurrentRoom(outside);  // start game outside
     }

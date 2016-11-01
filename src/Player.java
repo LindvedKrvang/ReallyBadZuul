@@ -16,13 +16,15 @@ import java.util.Stack;
 public class Player
 {
     private String name;
+    private int maxWeight;
     private Room currentRoom;
     private Stack previousRooms;
     private List<Item> inventory;
     
-    public Player(String name)
+    public Player(String name, int maxWeight)
     {
         this.name = name;
+        this.maxWeight = maxWeight;
         previousRooms = new Stack();
         inventory = new ArrayList<>();
     }
