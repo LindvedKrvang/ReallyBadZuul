@@ -13,17 +13,21 @@ public class Item
     private String name;
     private String description;
     private int weight;
+    private boolean edible;
     
     /**
      * Give the Item a description and a weight.
-     * @param description The description.
-     * @param weight The weight.
+     * @param name The name of the Item as String.
+     * @param description The description of the Item as String.
+     * @param weight The weight of the Item as int.
+     * @param edible Wheter the Player can eat the Item or not as boolean.
      */
-    public Item(String name, String description, int weight)
+    public Item(String name, String description, int weight, boolean edible)
     {
         this.name = name;
         this.description = description;
         this.weight = weight;
+        this.edible = edible;
     }
     
     /**
@@ -51,5 +55,14 @@ public class Item
     public int getWeight()
     {
         return weight;
+    }
+    
+    /**
+     * Checks if the Item is edible or not.
+     * @return True if edible. False if not.
+     */
+    public boolean isEdible()
+    {
+        return edible;
     }
 }
