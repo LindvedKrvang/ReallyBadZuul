@@ -1,6 +1,4 @@
 
-import java.util.Stack;
-
 /**
  * This class is the main class of the "World of Zuul" application. "World of
  * Zuul" is a very simple, text based adventure game. Users can walk around some
@@ -60,9 +58,12 @@ public class Game
         office.setExits("down", cellar);
         cellar.setExits("up", office);
 
-        office.createItem("computer", "A state of the art computer", 2);
-        pub.createItem("chair", "A solid, but used chair", 3);
-        pub.createItem("dartgame", "There is lots of holes in the wall next to it", 1);
+        office.createItem("computer", "A state of the art computer", 2, false);
+        pub.createItem("chair", "A solid, but used chair", 3, false);
+        pub.createItem("dartgame", "There is lots of holes in the wall next to it", 1, false);
+        pub.createItem("table", "Just a table", 6, false);
+        pub.createItem("book", "A big, heavy book", 2, false);
+        cellar.createItem("cookie", "A magic cookie that increases maximum weight by 10", 1, true);
 
         player.setCurrentRoom(outside);  // start game outside
     }
@@ -120,7 +121,6 @@ public class Game
             printHelp();
         } else if (commandWord.equals("go"))
         {
-
             goRoom(command);
         } else if (commandWord.equals("back"))
         {
@@ -128,6 +128,9 @@ public class Game
         } else if (commandWord.equals("look"))
         {
             look();
+        } else if (commandWord.equals("inventory"))
+        {
+            showInventory();
         } else if (commandWord.equals("take"))
         {
             takeItem(command);
@@ -136,7 +139,7 @@ public class Game
             dropItem(command);
         } else if (commandWord.equals("eat"))
         {
-            System.out.println("You hav eaten and are not hungry anymore.");
+            eat(command);
         } else if (commandWord.equals("quit"))
         {
             wantToQuit = quit(command);
@@ -229,7 +232,7 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
-    
+
     /**
      * Prints the info of the room.
      */
@@ -246,34 +249,43 @@ public class Game
     {
         System.out.println(player.getCurrentRoom().getLongDescription());
     }
-    
+
     /**
      * Checks if there is an Item to take. If yes, takes Item.
-     * @param command 
+     *
+     * @param command
      */
     private void takeItem(Command command)
     {
-        Item itemTotake;
-        try
+        Item itemTotake = player.getCurrentRoom().getItem(command.getSecondWord());
+        if (player.canCarryItem(itemTotake))
         {
-            if (player.getCurrentRoom().itemInRoom())
+            try
             {
-                itemTotake = player.getCurrentRoom().removeItem(command.getSecondWord());
-                player.addItemToInventory(itemTotake);
-                System.out.println(itemTotake.getName() + " was added to inventory\n");
-            } else
+                if (player.getCurrentRoom().isItemInRoom(itemTotake))
+                {
+                    player.getCurrentRoom().removeItem(itemTotake);
+                    player.addItemToInventory(itemTotake);
+                    player.setCurrentWeight(itemTotake.getWeight());
+                    System.out.println(itemTotake.getName() + " was added to inventory\n");
+                } else
+                {
+                    System.out.println("There is no items to take\n");
+                }
+            } catch (NullPointerException e)
             {
-                System.out.println("There is no items to take\n");
+                //Do Nothing
             }
-        } catch (NullPointerException e)
+        } else
         {
-            //Do Nothing
+            System.out.println("Not enough room in inventory for " + itemTotake.getName() + "\n");
         }
     }
-    
+
     /**
      * Checks if there is an Item to drop. If yes, drops it.
-     * @param command 
+     *
+     * @param command
      */
     private void dropItem(Command command)
     {
@@ -286,12 +298,49 @@ public class Game
                     Item itemToDrop;
                     itemToDrop = player.removeItemFromInventroy(command.getSecondWord());
                     player.getCurrentRoom().addItem(itemToDrop);
+                    player.setCurrentWeight(-itemToDrop.getWeight());
                     System.out.println(itemToDrop.getName() + " was removed from inventory\n");
                 }
             }
         } catch (NullPointerException e)
         {
             //Do nothing.
+        }
+    }
+
+    /**
+     * Shows which Items the Player are holding and the total weight.
+     */
+    private void showInventory()
+    {
+        String inventoryList = "";
+        int totalWeight = 0;
+        for (Item inventory : player.getInventory())
+        {
+            inventoryList += inventory.getName() + " ";
+            totalWeight += inventory.getWeight();
+        }
+        System.out.println("You are carrying: " + inventoryList
+                + "\nIt all weights " + totalWeight + " kg\n");
+    }
+    
+    /**
+     * Attempts to eat the given Item.
+     * @param command 
+     */
+    private void eat(Command command)
+    {
+        Item itemToBeEaten = player.getItemFromInventory(command.getSecondWord());
+        if (itemToBeEaten != null && itemToBeEaten.isEdible())
+        {
+            player.getInventory().remove(itemToBeEaten);
+            player.setCurrentWeight(-itemToBeEaten.getWeight());
+            if (itemToBeEaten.getName().equals("cookie"))
+            {
+                player.setMaxWeight(10);
+            }
+            System.out.println("You have eaten " + itemToBeEaten.getName()
+                    + " and are not hungry anymore.");
         }
     }
 }

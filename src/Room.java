@@ -4,19 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-
 /**
  * Class Room - a room in an adventure game.
  *
- * This class is part of the "World of Zuul" application.
- * "World of Zuul" is a very simple, text based adventure game.
+ * This class is part of the "World of Zuul" application. "World of Zuul" is a
+ * very simple, text based adventure game.
  *
- * A "Room" represents one location in the scenery of the game.  It is
- * connected to other rooms via exits.  The exits are labelled north,
- * east, south, west.  For each direction, the room stores a reference
- * to the neighboring room, or null if there is no exit in that direction.
+ * A "Room" represents one location in the scenery of the game. It is connected
+ * to other rooms via exits. The exits are labelled north, east, south, west.
+ * For each direction, the room stores a reference to the neighboring room, or
+ * null if there is no exit in that direction.
  *
- * @author  Michael Kölling and David J. Barnes
+ * @author Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
 public class Room
@@ -41,7 +40,9 @@ public class Room
     }
 
     /**
-     * Define the exits of this room.     *
+     * Define the exits of this room.
+     *
+     *
      * @param direction The direction of the exit.
      * @param neighbor The room in the given direction.
      */
@@ -49,22 +50,24 @@ public class Room
     {
         exits.put(direction, neighbor);
     }
-    
+
     /**
      * Define an Item that spawns in the room.
+     *
      * @param name as String.
      * @param description as String.
      * @param weight as int.
      */
-    public void createItem(String name, String description, int weight)
+    public void createItem(String name, String description, int weight, boolean edible)
     {
-        Item item = new Item(name, description, weight);
+        Item item = new Item(name, description, weight, edible);
         items.add(item);
         itemInRoom = true;
     }
-    
+
     /**
      * Adds an Item to the Room dropped by the player.
+     *
      * @param itemToAdd The Item added to the Room.
      */
     public void addItem(Item itemToAdd)
@@ -72,28 +75,48 @@ public class Room
         items.add(itemToAdd);
         itemInRoom = true;
     }
-    
+
     /**
      * Removes an Item from the Room.
-     * @param itemToRemove The name of the Item as String.
-     * @return A reference to the removed Items.
+     *
+     * @param itemToRemove The Item to remove.
      */
-    public Item removeItem(String itemToRemove)
+    public void removeItem(Item itemToRemove)
     {
-        Item itemRemoved = null;
-        for(int i = 0; i < items.size(); i++)
+        if (isItemInRoom(itemToRemove))
         {
-            if(items.get(i).getName().equals(itemToRemove))
+            for (int i = 0; i < items.size(); i++)
             {
-                itemRemoved = items.get(i);
-                items.remove(i);
+                if (items.get(i) == itemToRemove)
+                {
+                    items.remove(i);
+                }
             }
         }
-        return itemRemoved;
     }
-    
+
+    /**
+     * Gets an Item from the Room.
+     *
+     * @param itemToGet Name of the Item as String.
+     * @return A reference to the Item object.
+     */
+    public Item getItem(String itemToGet)
+    {
+        Item itemToReturn = null;
+        for (int i = 0; i < items.size(); i++)
+        {
+            if (items.get(i).getName().equals(itemToGet))
+            {
+                itemToReturn = items.get(i);
+            }
+        }
+        return itemToReturn;
+    }
+
     /**
      * Return the exit attempting to exit.
+     *
      * @param direction that the player attempts to exit.
      * @return the exit for the direction.
      */
@@ -109,55 +132,66 @@ public class Room
     {
         return description;
     }
-    
+
     /**
-     * Return a description of the room's exits.
-     * for example, "Exits: north west".
-     * @return  A description of the available exits.
+     * Return a description of the room's exits. for example, "Exits: north
+     * west".
+     *
+     * @return A description of the available exits.
      */
     public String getExitString()
     {
         String returnString = "Exits:";
         Set<String> keys = exits.keySet();
-        for(String exit : keys)
+        for (String exit : keys)
         {
             returnString += " " + exit;
         }
         return returnString;
     }
-    
+
     /**
-     * Retun a long description of this room, of the form:
-     *  You are in the kitchen.
-     *  Exits: north west.
-     * @return 
+     * Retun a long description of this room, of the form: You are in the
+     * kitchen. Exits: north west.
+     *
+     * @return
      */
     public String getLongDescription()
     {
         String longDescription;
         longDescription = "You are " + description + "\n" + getExitString();
-        if(items.isEmpty())
+        if (items.isEmpty())
         {
             itemInRoom = false;
         }
-        if(itemInRoom)
+        if (itemInRoom)
         {
             longDescription += "\n\nYou see some items:";
-            for(Item item : items)
+            for (Item item : items)
             {
                 longDescription += "\nName: " + item.getName()
-                    + "\nDescription: " + item.getDescription() + "\nWeight: " + item.getWeight();
-            }            
+                        + "\nDescription: " + item.getDescription() + "\nWeight: " + item.getWeight();
+            }
         }
         return longDescription;
     }
-    
+
     /**
-     * Checks if there is an item in the Room.
-     * @return True if yes. False if no.
+     * Checks if the Item is in the Room.
+     *
+     * @param item Item checking for.
+     * @return True if in the Room. False if not.
      */
-    public boolean itemInRoom()
+    public boolean isItemInRoom(Item item)
     {
-        return itemInRoom;
+        boolean itemIsThere = false;
+        for (int i = 0; i < items.size(); i++)
+        {
+            if (items.get(i) == item)
+            {
+                itemIsThere = true;
+            }
+        }
+        return itemIsThere;
     }
 }
