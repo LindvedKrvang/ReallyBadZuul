@@ -28,7 +28,7 @@ public class Game
      */
     public Game() 
     {
-        player = new Player();
+        player = new Player("Rasmus");
         createRooms();
         parser = new Parser();        
     }
@@ -60,9 +60,9 @@ public class Game
         office.setExits("down", cellar);
         cellar.setExits("up", office);
         
-        office.addItem("Computer", 2);
-        pub.addItem("Chair", 3);
-        pub.addItem("Dart Game", 1);
+        office.createItem("Computer", "A state of the art computer", 2);
+        pub.createItem("Chair", "A solid, but used chair", 3);
+        pub.createItem("Dart Game", "There is lots of holes in the wall next to it", 1);
 
         player.setCurrentRoom(outside);  // start game outside
     }
@@ -127,6 +127,20 @@ public class Game
         else if(commandWord.equals("look"))
         {
             look();
+        }
+        else if(commandWord.equals("take"))
+        {
+            Item itemTotake;
+            itemTotake = player.getCurrentRoom().removeItem(command.getSecondWord());
+            player.addItemToInventory(itemTotake);
+            System.out.println(itemTotake.getName() + " was added to inventory");
+        }
+        else if(commandWord.equals("drop"))
+        {
+            Item itemToDrop;
+            itemToDrop = player.removeItemFromInventroy(command.getSecondWord());
+            player.getCurrentRoom().addItem(itemToDrop);
+            System.out.println(itemToDrop.getName() + " was removed from inventory");
         }
         else if(commandWord.equals("eat"))
         {

@@ -51,15 +51,44 @@ public class Room
     }
     
     /**
-     * Define the Item in the room.
-     * @param description The description as a String.
-     * @param weight The weight as an int.
+     * Define an Item that spawns in the room.
+     * @param name as String.
+     * @param description as String.
+     * @param weight as int.
      */
-    public void addItem(String description, int weight)
+    public void createItem(String name, String description, int weight)
     {
-        Item item = new Item(description, weight);
+        Item item = new Item(name, description, weight);
         items.add(item);
         itemInRoom = true;
+    }
+    
+    /**
+     * Adds an Item to the Room dropped by the player.
+     * @param itemToAdd The Item added to the Room.
+     */
+    public void addItem(Item itemToAdd)
+    {
+        items.add(itemToAdd);
+    }
+    
+    /**
+     * Removes an Item from the Room.
+     * @param itemToRemove The name of the Item as String.
+     * @return A reference to the removed Items.
+     */
+    public Item removeItem(String itemToRemove)
+    {
+        Item itemRemoved = null;
+        for(int i = 0; i < items.size(); i++)
+        {
+            if(items.get(i).getName().equals(itemToRemove))
+            {
+                itemRemoved = items.get(i);
+                items.remove(i);
+            }
+        }
+        return itemRemoved;
     }
     
     /**
@@ -108,10 +137,11 @@ public class Room
         longDescription = "You are " + description + "\n" + getExitString();
         if(itemInRoom)
         {
+            longDescription += "\n\nYou see some items:";
             for(Item item : items)
             {
-                longDescription += "\nThere's a " + item.getDescription() 
-                    + " in the room. \nIt weights " + item.getWeight() + " kg.";
+                longDescription += "\nName: " + item.getName()
+                    + "\nDescription: " + item.getDescription() + "\nWeight: " + item.getWeight();
             }            
         }
         return longDescription;

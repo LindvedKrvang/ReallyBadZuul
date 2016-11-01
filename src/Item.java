@@ -10,6 +10,7 @@
  */
 public class Item
 {
+    private String name;
     private String description;
     private int weight;
     
@@ -18,10 +19,20 @@ public class Item
      * @param description The description.
      * @param weight The weight.
      */
-    public Item(String description, int weight)
+    public Item(String name, String description, int weight)
     {
+        this.name = name;
         this.description = description;
         this.weight = weight;
+    }
+    
+    /**
+     * Get the name of the Item.
+     * @return name as a String.
+     */
+    public String getName()
+    {
+        return name;
     }
     
     /**
