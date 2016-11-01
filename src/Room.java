@@ -1,5 +1,7 @@
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,7 +24,7 @@ public class Room
 
     private String description;
     private HashMap<String, Room> exits;
-    private Item item;
+    private List<Item> items;
     private boolean itemInRoom = false;
 
     /**
@@ -35,6 +37,7 @@ public class Room
     {
         this.description = description;
         exits = new HashMap<>();
+        items = new ArrayList<>();
     }
 
     /**
@@ -52,9 +55,10 @@ public class Room
      * @param description The description as a String.
      * @param weight The weight as an int.
      */
-    public void setItem(String description, int weight)
+    public void addItem(String description, int weight)
     {
-        item = new Item(description, weight);
+        Item item = new Item(description, weight);
+        items.add(item);
         itemInRoom = true;
     }
     
@@ -104,8 +108,11 @@ public class Room
         longDescription = "You are " + description + "\n" + getExitString();
         if(itemInRoom)
         {
-            longDescription += "\nThere's a " + item.getDescription() 
+            for(Item item : items)
+            {
+                longDescription += "\nThere's a " + item.getDescription() 
                     + " in the room. \nIt weights " + item.getWeight() + " kg.";
+            }            
         }
         return longDescription;
     }

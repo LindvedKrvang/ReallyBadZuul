@@ -1,3 +1,6 @@
+
+import java.util.Stack;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -18,15 +21,16 @@
 public class Game 
 {
     private Parser parser;
-    private Room currentRoom;
+    private Player player;
         
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
+        player = new Player();
         createRooms();
-        parser = new Parser();
+        parser = new Parser();        
     }
 
     /**
@@ -56,10 +60,11 @@ public class Game
         office.setExits("down", cellar);
         cellar.setExits("up", office);
         
-        office.setItem("Computer", 2);
-        pub.setItem("Chair", 3);
+        office.addItem("Computer", 2);
+        pub.addItem("Chair", 3);
+        pub.addItem("Dart Game", 1);
 
-        currentRoom = outside;  // start game outside
+        player.setCurrentRoom(outside);  // start game outside
     }
 
     /**
@@ -112,7 +117,12 @@ public class Game
             printHelp();
         }
         else if (commandWord.equals("go")) {
-            goRoom(command);
+            
+            goRoom(command);            
+        }
+        else if(commandWord.equals("back"))
+        {
+            goBack(command);
         }
         else if(commandWord.equals("look"))
         {
@@ -148,6 +158,7 @@ public class Game
     /** 
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
+     * Sets lastRoom to the currentRoom right before leaving the room.
      */
     private void goRoom(Command command) 
     {
@@ -160,14 +171,39 @@ public class Game
         String direction = command.getSecondWord();
 
         // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
+        Room nextRoom = player.getCurrentRoom().getExit(direction);
 
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
         else {
-            currentRoom = nextRoom;
+            player.getPreviousRooms().push(player.getCurrentRoom());
+            player.setCurrentRoom(nextRoom);
             printLocationInfo();
+        }
+    }
+    
+    /**
+     * Goes back to the previues room.
+     * If trying to go back from the very first room. Print a message.
+     */
+    private void goBack(Command command)
+    {
+        if(command.hasSecondWord()) 
+        {
+            // if there is no second word, we don't know where to go...
+            System.out.println("Go where?");
+            return;
+        }
+        
+        if(!player.getPreviousRooms().isEmpty())
+        {
+            player.setCurrentRoom((Room) player.getPreviousRooms().pop());
+            printLocationInfo();
+        }
+        else
+        {
+            System.out.println("You haven't left the first room yet.");
         }
     }
 
@@ -189,7 +225,7 @@ public class Game
     
     private void printLocationInfo()
     {
-        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.getCurrentRoom().getLongDescription());
             System.out.println();
     }
     
@@ -198,6 +234,6 @@ public class Game
      */
     private void look()
     {
-        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.getCurrentRoom().getLongDescription());
     }
 }
