@@ -101,6 +101,7 @@ public class Game
 
     /**
      * Print out the opening message for the player.
+     * @return Welcome message as String.
      */
     public String printWelcome()
     {

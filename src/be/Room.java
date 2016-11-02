@@ -1,6 +1,5 @@
 package be;
 
-
 import be.Item;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,16 +167,27 @@ public class Room
         {
             itemInRoom = false;
         }
+
+        return longDescription;
+    }
+    
+    /**
+     * Checks if there is any items in the room.
+     * @return A String with all the items.
+     */
+    public String getItemDescription()
+    {
+        String itemDescription = "";
         if (itemInRoom)
         {
-            longDescription += "\n\nYou see some items:";
+            itemDescription += "\n\nYou see some items:";
             for (Item item : items)
             {
-                longDescription += "\nName: " + item.getName()
+                itemDescription += "\nName: " + item.getName()
                         + "\nDescription: " + item.getDescription() + "\nWeight: " + item.getWeight();
             }
         }
-        return longDescription;
+        return itemDescription;
     }
 
     /**

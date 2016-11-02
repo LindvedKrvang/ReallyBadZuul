@@ -20,8 +20,7 @@ public class Zuul extends Application
     
     public static void main(String[] args)
     {
-        launch(args);
-       
+        launch(args);       
     }
     
     /**
@@ -32,7 +31,7 @@ public class Zuul extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/gameView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/GameView.fxml"));
         AnchorPane root = (AnchorPane)loader.load();
         
         Scene scene = new Scene(root);
@@ -41,8 +40,6 @@ public class Zuul extends Application
         gController.startGame();
         
         stage.setScene(scene);
-        stage.show();
-        
-        
+        stage.show();        
     }
 }
