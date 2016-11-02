@@ -1,6 +1,10 @@
 
-import gui.Game;
-
+import gui.controller.GameController;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,14 +15,32 @@ import gui.Game;
  *
  * @author Stegger
  */
-public class Zuul
+public class Zuul extends Application
 {
     
     public static void main(String[] args)
     {
-        Game game = new Game();
-        game.play();
+        launch(args);
+//        Game game = new Game();
+//        game.play();
     }
     
-    
+    /**
+     * Loads the GUI.
+     * @param stage
+     * @throws Exception 
+     */
+    @Override
+    public void start(Stage stage) throws Exception
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/gameView.fxml"));
+        AnchorPane root = (AnchorPane)loader.load();
+        
+        Scene scene = new Scene(root);
+        
+        GameController gController = (GameController)loader.getController();
+        
+        stage.setScene(scene);
+        stage.show();
+    }
 }
