@@ -109,40 +109,42 @@ public class Game
     {
         boolean wantToQuit = false;
 
-        if (command.isUnknown())
+        CommandWord commandWord = command.getCommandWord();
+//        if (null != commandWord)
+        switch (commandWord)
         {
-            System.out.println("I don't know what you mean...");
-            return false;
-        }
-
-        String commandWord = command.getCommandWord();
-        if (commandWord.equals("help"))
-        {
-            printHelp();
-        } else if (commandWord.equals("go"))
-        {
-            goRoom(command);
-        } else if (commandWord.equals("back"))
-        {
-            goBack(command);
-        } else if (commandWord.equals("look"))
-        {
-            look();
-        } else if (commandWord.equals("inventory"))
-        {
-            showInventory();
-        } else if (commandWord.equals("take"))
-        {
-            takeItem(command);
-        } else if (commandWord.equals("drop"))
-        {
-            dropItem(command);
-        } else if (commandWord.equals("eat"))
-        {
-            eat(command);
-        } else if (commandWord.equals("quit"))
-        {
-            wantToQuit = quit(command);
+            case UNKOWN:
+                System.out.println("I don't know what you mean...");
+                return false;
+            case HELP:
+                printHelp();
+                break;
+            case GO:
+                goRoom(command);
+                break;
+            case BACK:
+                goBack(command);
+                break;
+            case LOOK:
+                look();
+                break;
+            case INVENTORY:
+                showInventory();
+                break;
+            case TAKE:
+                takeItem(command);
+                break;
+            case DROP:
+                dropItem(command);
+                break;
+            case EAT:
+                eat(command);
+                break;
+            case QUIT:
+                wantToQuit = quit(command);
+                break;
+            default:
+                break;
         }
 
         return wantToQuit;
@@ -257,6 +259,13 @@ public class Game
      */
     private void takeItem(Command command)
     {
+        if (!command.hasSecondWord())
+        {
+            // if there is no second word, we don't know what to take...
+            System.out.println("Take what?");
+            return;
+        }
+        
         Item itemTotake = player.getCurrentRoom().getItem(command.getSecondWord());
         if (player.canCarryItem(itemTotake))
         {
@@ -289,6 +298,13 @@ public class Game
      */
     private void dropItem(Command command)
     {
+        if (!command.hasSecondWord())
+        {
+            // if there is no second word, we don't know what to drop...
+            System.out.println("Drop what?");
+            return;
+        }
+        
         try
         {
             for (int i = 0; i < player.getInventory().size(); i++)
@@ -323,13 +339,21 @@ public class Game
         System.out.println("You are carrying: " + inventoryList
                 + "\nIt all weights " + totalWeight + " kg\n");
     }
-    
+
     /**
      * Attempts to eat the given Item.
-     * @param command 
+     *
+     * @param command
      */
     private void eat(Command command)
     {
+        if (!command.hasSecondWord())
+        {
+            // if there is no second word, we don't know what to eat..
+            System.out.println("Eat what?");
+            return;
+        }
+        
         Item itemToBeEaten = player.getItemFromInventory(command.getSecondWord());
         if (itemToBeEaten != null && itemToBeEaten.isEdible())
         {
