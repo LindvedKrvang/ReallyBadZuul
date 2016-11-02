@@ -1,4 +1,7 @@
+package bll;
 
+
+import bll.CommandWord;
 import java.util.HashMap;
 
 /**

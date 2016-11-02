@@ -1,3 +1,13 @@
+package gui;
+
+
+import be.Player;
+import be.Room;
+import be.Item;
+import bll.Parser;
+import bll.CommandWord;
+import bll.Command;
+
 
 /**
  * This class is the main class of the "World of Zuul" application. "World of
