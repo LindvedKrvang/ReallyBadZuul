@@ -23,15 +23,13 @@ public class CommandWords
     public CommandWords()
     {
         validCommands = new HashMap<>();
-        validCommands.put("go", CommandWord.GO);
-        validCommands.put("help", CommandWord.HELP);
-        validCommands.put("quit", CommandWord.QUIT);
-        validCommands.put("look", CommandWord.LOOK);
-        validCommands.put("eat", CommandWord.EAT);
-        validCommands.put("back", CommandWord.BACK);
-        validCommands.put("take", CommandWord.TAKE);
-        validCommands.put("drop", CommandWord.DROP);
-        validCommands.put("inventory", CommandWord.INVENTORY);
+        for (CommandWord command : CommandWord.values())
+        {
+            if(command != CommandWord.UNKOWN)
+            {
+                validCommands.put(command.toString(), command);
+            }
+        }
     }
     
     /**
