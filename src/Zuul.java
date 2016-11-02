@@ -21,8 +21,7 @@ public class Zuul extends Application
     public static void main(String[] args)
     {
         launch(args);
-//        Game game = new Game();
-//        game.play();
+       
     }
     
     /**
@@ -39,8 +38,11 @@ public class Zuul extends Application
         Scene scene = new Scene(root);
         
         GameController gController = (GameController)loader.getController();
+        gController.startGame();
         
         stage.setScene(scene);
         stage.show();
+        
+        
     }
 }

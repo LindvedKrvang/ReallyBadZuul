@@ -60,6 +60,7 @@ public class Room
      * @param name as String.
      * @param description as String.
      * @param weight as int.
+     * @param edible as boolean.
      */
     public void createItem(String name, String description, int weight, boolean edible)
     {

@@ -5,6 +5,7 @@
  */
 package gui.controller;
 
+import gui.Game;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -19,7 +20,8 @@ import javafx.scene.control.TextField;
  */
 public class GameController implements Initializable
 {
-
+    Game game = new Game();
+    
     @FXML
     private TextArea txtARoomInfo;
     @FXML
@@ -38,4 +40,12 @@ public class GameController implements Initializable
         // TODO
     }    
     
+    /**
+     * Starts the game.
+     */
+    public void startGame()
+    {
+        txtAGeneralInfo.setText(game.printWelcome());
+        txtARoomInfo.setText(game.printLocationInfo());
+    }
 }

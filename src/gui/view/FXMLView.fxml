@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="644.0" prefWidth="468.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.view.FXMLViewController">
+   <children>
+      <Pane layoutX="3.0" layoutY="63.0" prefHeight="514.0" prefWidth="459.0">
+         <children>
+            <TextArea fx:id="txtARoomInfo" layoutX="14.0" layoutY="14.0" prefHeight="101.0" prefWidth="436.0" />
+            <TextArea fx:id="txtAItemInfo" layoutX="14.0" layoutY="136.0" prefHeight="93.0" prefWidth="436.0" />
+            <TextArea fx:id="txtAGeneralInfo" layoutX="14.0" layoutY="254.0" prefHeight="252.0" prefWidth="436.0" style="-fx-background-radius: 25, 25, 25, 25;" />
+         </children>
+      </Pane>
+      <TextField fx:id="txtCommands" layoutX="101.0" layoutY="584.0" prefHeight="46.0" prefWidth="263.0" style="-fx-background-radius: 25, 25, 25, 25;" />
+      <Label alignment="CENTER" layoutX="42.0" layoutY="14.0" prefHeight="40.0" prefWidth="385.0" text="World of Zuul">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

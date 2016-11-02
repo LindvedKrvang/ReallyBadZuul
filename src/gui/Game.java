@@ -80,10 +80,11 @@ public class Game
 
     /**
      * Main play routine. Loops until end of play.
+     * Uses for console.
      */
     public void play()
     {
-        printWelcome();
+        System.out.println("printWelcome()");
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
@@ -95,18 +96,19 @@ public class Game
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
+    
+    
 
     /**
      * Print out the opening message for the player.
      */
-    private void printWelcome()
+    public String printWelcome()
     {
-        System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type '" + CommandWord.HELP.toString() + "' if you need help.");
-        System.out.println();
-        printLocationInfo();
+        String welcomeString = "";
+        welcomeString += "Welcome to the World of Zuul!"
+                + "\nWorld of Zuul is a new, incredibly boring adventure game."
+                + "\nType '" + CommandWord.HELP.toString() + "' if you need help.\n";
+        return welcomeString;
     }
 
     /**
@@ -248,10 +250,11 @@ public class Game
     /**
      * Prints the info of the room.
      */
-    private void printLocationInfo()
+    public String printLocationInfo()
     {
-        System.out.println(player.getCurrentRoom().getLongDescription());
-        System.out.println();
+        String locationInfo = "";
+        locationInfo += player.getCurrentRoom().getLongDescription() + "\n";
+        return locationInfo;
     }
 
     /**
