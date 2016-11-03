@@ -92,7 +92,7 @@ public class Game
         while (!finished)
         {
             Command command = parser.getCommand();
-            finished = processCommand(command);
+//            finished = processCommand(command);
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
@@ -107,7 +107,7 @@ public class Game
     {
         String welcomeString = "";
         welcomeString += "Welcome to the World of Zuul!"
-                + "\nWorld of Zuul is a new, incredibly boring adventure game."
+                + "\nWorld of Zuul is a new, incredibly \nboring adventure game."
                 + "\nType '" + CommandWord.HELP.toString() + "' if you need help.\n";
         return welcomeString;
     }
@@ -118,63 +118,64 @@ public class Game
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
      */
-    private boolean processCommand(Command command)
+    public String processCommand(Command command)
     {
-        boolean wantToQuit = false;
+        boolean canReturnText = false;
+        String textToReturn = "";
 
         CommandWord commandWord = command.getCommandWord();
 //        if (null != commandWord)
         switch (commandWord)
         {
             case UNKOWN:
-                System.out.println("I don't know what you mean...");
-                return false;
+                textToReturn = "I don't know what you mean...";
+                break;
             case HELP:
-                printHelp();
+                textToReturn += printHelp();
                 break;
             case GO:
                 goRoom(command);
                 break;
             case BACK:
-                goBack(command);
+                textToReturn = goBack(command);
                 break;
-            case LOOK:
+            case LOOK: //TODO remove
                 look();
                 break;
-            case INVENTORY:
+            case INVENTORY: //TODO remove
                 showInventory();
                 break;
-            case TAKE:
-                takeItem(command);
+            case TAKE:                
+                textToReturn += takeItem(command);
                 break;
             case DROP:
-                dropItem(command);
+                textToReturn = dropItem(command);
                 break;
             case EAT:
-                eat(command);
+                textToReturn = eat(command);
                 break;
             case QUIT:
-                wantToQuit = quit(command);
+                canReturnText = quit(command); //TODO remove
                 break;
             default:
                 break;
         }
-
-        return wantToQuit;
+        
+        return  textToReturn;
     }
 
     // implementations of user commands:
     /**
      * Print out some help information. Here we print some stupid, cryptic
      * message and a list of the command words.
+     * @return 
      */
-    private void printHelp()
+    public String printHelp()
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
-        System.out.println();
-        System.out.println("Your command words are:");
-        System.out.println(parser.showCommands());
+        String help = "You are lost. You are alone. You wander around at the university."
+                + "\n\nYour command words are:\n" + parser.showCommands() + "\n";
+        
+        return help;
     }
 
     /**
@@ -182,13 +183,14 @@ public class Game
      * otherwise print an error message. Sets lastRoom to the currentRoom right
      * before leaving the room.
      */
-    private void goRoom(Command command)
+    private String goRoom(Command command)
     {
+        String text = "";
         if (!command.hasSecondWord())
         {
             // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
-            return;
+            text = "Go where?";
+            return text;
         }
 
         String direction = command.getSecondWord();
@@ -198,36 +200,37 @@ public class Game
 
         if (nextRoom == null)
         {
-            System.out.println("There is no door!");
+            text = "There is no door!";
         } else
         {
             player.getPreviousRooms().push(player.getCurrentRoom());
             player.setCurrentRoom(nextRoom);
-            printLocationInfo();
         }
+        return text;
     }
 
     /**
      * Goes back to the previues room. If trying to go back from the very first
      * room. Print a message.
      */
-    private void goBack(Command command)
+    private String goBack(Command command)
     {
+        String text = "";
         if (command.hasSecondWord())
         {
             // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
-            return;
+            text = "Go where?";
+            return text;
         }
 
         if (!player.getPreviousRooms().isEmpty())
         {
             player.setCurrentRoom((Room) player.getPreviousRooms().pop());
-            printLocationInfo();
         } else
         {
-            System.out.println("You haven't left the first room yet.");
+            text = "You haven't left the first room yet.";
         }
+        return text;
     }
 
     /**
@@ -250,6 +253,7 @@ public class Game
 
     /**
      * Prints the info of the room.
+     * @return the info as String.
      */
     public String printLocationInfo()
     {
@@ -270,16 +274,17 @@ public class Game
      * Checks if there is an Item to take. If yes, takes Item.
      *
      * @param command
+     * @return A String depending on the status.
      */
-    private void takeItem(Command command)
+    private String takeItem(Command command)
     {
         if (!command.hasSecondWord())
         {
-            // if there is no second word, we don't know what to take...
-            System.out.println("Take what?");
-            return;
+            // if there is no second word, we don't know what to take...            
+            return "Take what?";
         }
         
+        String itemTaken = "";
         Item itemTotake = player.getCurrentRoom().getItem(command.getSecondWord());
         if (player.canCarryItem(itemTotake))
         {
@@ -290,10 +295,10 @@ public class Game
                     player.getCurrentRoom().removeItem(itemTotake);
                     player.addItemToInventory(itemTotake);
                     player.setCurrentWeight(itemTotake.getWeight());
-                    System.out.println(itemTotake.getName() + " was added to inventory\n");
+                    itemTaken = itemTotake.getName() + " was added to inventory\n";
                 } else
                 {
-                    System.out.println("There is no items to take\n");
+                    itemTaken = "There is no items to take\n";
                 }
             } catch (NullPointerException e)
             {
@@ -301,8 +306,9 @@ public class Game
             }
         } else
         {
-            System.out.println("Not enough room in inventory for " + itemTotake.getName() + "\n");
+            itemTaken = "Not enough room in inventory for " + itemTotake.getName() + "\n";
         }
+        return itemTaken;
     }
 
     /**
@@ -310,13 +316,14 @@ public class Game
      *
      * @param command
      */
-    private void dropItem(Command command)
+    private String dropItem(Command command)
     {
+        String itemDropped = "";
         if (!command.hasSecondWord())
         {
             // if there is no second word, we don't know what to drop...
-            System.out.println("Drop what?");
-            return;
+            itemDropped = "Drop what?";
+            return itemDropped;
         }
         
         try
@@ -329,29 +336,31 @@ public class Game
                     itemToDrop = player.removeItemFromInventroy(command.getSecondWord());
                     player.getCurrentRoom().addItem(itemToDrop);
                     player.setCurrentWeight(-itemToDrop.getWeight());
-                    System.out.println(itemToDrop.getName() + " was removed from inventory\n");
+                    itemDropped += itemToDrop.getName() + " was removed from inventory\n";
                 }
             }
         } catch (NullPointerException e)
         {
             //Do nothing.
         }
+        return itemDropped;
     }
 
     /**
      * Shows which Items the Player are holding and the total weight.
+     * @return 
      */
-    private void showInventory()
+    public String showInventory()
     {
         String inventoryList = "";
         int totalWeight = 0;
         for (Item inventory : player.getInventory())
         {
-            inventoryList += inventory.getName() + " ";
+            inventoryList += inventory.getName() + "\n";
             totalWeight += inventory.getWeight();
         }
-        System.out.println("You are carrying: " + inventoryList
-                + "\nIt all weights " + totalWeight + " kg\n");
+        return ("You are carrying:\n" + inventoryList
+                + "It all weights " + totalWeight + " kg\n");
     }
 
     /**
@@ -359,13 +368,14 @@ public class Game
      *
      * @param command
      */
-    private void eat(Command command)
+    private String eat(Command command)
     {
+        String eatText = "";
         if (!command.hasSecondWord())
         {
             // if there is no second word, we don't know what to eat..
-            System.out.println("Eat what?");
-            return;
+            eatText = "Eat what?";
+            return eatText;
         }
         
         Item itemToBeEaten = player.getItemFromInventory(command.getSecondWord());
@@ -377,8 +387,18 @@ public class Game
             {
                 player.setMaxWeight(10);
             }
-            System.out.println("You have eaten " + itemToBeEaten.getName()
-                    + " and are not hungry anymore.");
+            eatText += "You have eaten " + itemToBeEaten.getName()
+                    + " and are not hungry anymore.";
         }
+        return eatText;
+    }
+    
+    /**
+     * Gets the info on all Items in the Room.
+     * @return All Items as String.
+     */
+    public String getItemDescription()
+    {
+        return player.getCurrentRoom().getItemDescription();
     }
 }

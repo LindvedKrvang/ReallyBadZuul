@@ -180,7 +180,7 @@ public class Room
         String itemDescription = "";
         if (itemInRoom)
         {
-            itemDescription += "\n\nYou see some items:";
+            itemDescription += "You see some items:\n";
             for (Item item : items)
             {
                 itemDescription += "\nName: " + item.getName()
