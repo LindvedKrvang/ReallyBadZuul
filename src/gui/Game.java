@@ -46,36 +46,37 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office, cellar;
+        Room startArea, firstDoorHall, storage, chasim, alcove, mainHall, kitchen;
 
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-        cellar = new Room("in the cellar under the office");
+        startArea = new Room("in a dimlight room. There's a skeleton next to you");
+        firstDoorHall = new Room("in a big dusty area. There's a large old door. \nIt looks heavy");
+        storage = new Room("in a small dirty room. It appears to be a storage.");
+        chasim = new Room("in a narrow room. There's a chasim dividing it.");
+        alcove = new Room("in what appears to be an old study. "
+                + "\nStuff is lying around. in no apparent order. \nSo untidy.");
+        mainHall = new Room("in a large room. There's a long table in the middle."
+                + "\nThe table is set as a mighty feast is about to take place."
+                + "\nSeveral skulls are displayed in the room.");
+//        
 
-        // initialise room exits
-        outside.setExits("east", theater);
-        outside.setExits("south", lab);
-        outside.setExits("west", pub);
-        theater.setExits("west", outside);
-        pub.setExits("east", outside);
-        lab.setExits("east", office);
-        lab.setExits("north", outside);
-        office.setExits("west", lab);
-        office.setExits("down", cellar);
-        cellar.setExits("up", office);
+         //initialise room exits
+         startArea.setExits("north", firstDoorHall);
+         firstDoorHall.setExits("south", startArea);
+         firstDoorHall.setExits("east", storage);
+         firstDoorHall.setExits("west", chasim);
+         firstDoorHall.setExits("north", mainHall);
+         storage.setExits("west", firstDoorHall);
+         chasim.setExits("east", firstDoorHall);
+         chasim.setExits("west", alcove);
+         alcove.setExits("east", chasim);
+         
+         //Creates all the items in the game.
+         storage.createItem("planks", "Long sturdy planks. \nSeems able to carry a person", 6, false);
+         storage.createItem("nails", "Old rusty nails. \nSome are bend, others broken", 0, false);
+         alcove.createItem("oldKey", "Old keys. Nothing speciel.", 0, false);
 
-        office.createItem("computer", "A state of the art computer", 2, false);
-        pub.createItem("chair", "A solid, but used chair", 3, false);
-        pub.createItem("dartgame", "There is lots of holes in the wall next to it", 1, false);
-        pub.createItem("table", "Just a table", 6, false);
-        pub.createItem("book", "A big, heavy book", 2, false);
-        cellar.createItem("cookie", "A magic cookie that increases maximum weight by 10", 1, true);
-
-        player.setCurrentRoom(outside);  // start game outside
+        player.setCurrentRoom(startArea);  // start game in startArea
     }
 
     /**

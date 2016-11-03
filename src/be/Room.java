@@ -184,7 +184,7 @@ public class Room
             for (Item item : items)
             {
                 itemDescription += "\nName: " + item.getName()
-                        + "\nDescription: " + item.getDescription() + "\nWeight: " + item.getWeight();
+                        + "\n" + item.getDescription() + "\nWeight: " + item.getWeight() + "\n";
             }
         }
         return itemDescription;
