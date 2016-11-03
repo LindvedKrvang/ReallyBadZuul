@@ -25,9 +25,11 @@ public class Room
 
     private String description;
     private HashMap<String, Room> exits;
+    private HashMap<String, Boolean> blockedExits;
     private List<Item> items;
     private boolean itemInRoom = false;
-
+    
+    
     /**
      * Create a room described "description". Initially, it has no exits.
      * "description" is something like "a kitchen" or "an open court yard".
@@ -47,10 +49,12 @@ public class Room
      *
      * @param direction The direction of the exit.
      * @param neighbor The room in the given direction.
+     * @param locked True if that direction is blocked and needs to be unlocked.
      */
-    public void setExits(String direction, Room neighbor)
+    public void setExits(String direction, Room neighbor, boolean locked)
     {
         exits.put(direction, neighbor);
+        blockedExits.put(direction, locked);
     }
 
     /**
@@ -151,6 +155,18 @@ public class Room
             returnString += " " + exit;
         }
         return returnString;
+    }
+    
+    public boolean isExitBlocked()
+    {
+        Set<String> keys = blockedExits.keySet();
+        for(String blocked : keys)
+        {
+            if(keys.equals(true))
+            {
+                
+            }
+        }
     }
 
     /**
