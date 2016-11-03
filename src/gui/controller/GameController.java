@@ -16,6 +16,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 /**
  * FXML Controller class
@@ -60,9 +62,11 @@ public class GameController implements Initializable
     }
     
     @FXML
-    public void goButton(ActionEvent event)
+    public void goButton(KeyEvent event)
     {
-        String[] userInput;
+        if(event.getCode() == KeyCode.ENTER)
+        {
+            String[] userInput;
         userInput = txtCommands.getText().split(" ");
         String firstWord = userInput[0];
         String secondWord = null;
@@ -76,5 +80,7 @@ public class GameController implements Initializable
         txtARoomInfo.setText(game.printLocationInfo());
         txtAItemInfo.setText(game.getItemDescription());
         txtAInventory.setText(game.showInventory());
+        txtCommands.setText("");
+        }        
     }
 }
