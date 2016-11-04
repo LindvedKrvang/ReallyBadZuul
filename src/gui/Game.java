@@ -140,23 +140,11 @@ public class Game
             case BACK:
                 textToReturn = goBack(command);
                 break;
-            case LOOK: //TODO remove
-                look();
-                break;
-            case INVENTORY: //TODO remove
-                showInventory();
-                break;
             case TAKE:                
                 textToReturn += takeItem(command);
                 break;
             case DROP:
                 textToReturn = dropItem(command);
-                break;
-            case EAT:
-                textToReturn = eat(command);
-                break;
-            case QUIT:
-                canReturnText = quit(command); //TODO remove
                 break;
             default:
                 break;
