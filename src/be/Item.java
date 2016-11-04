@@ -67,4 +67,27 @@ public class Item
     {
         return edible;
     }
+    
+    /**
+     * Get the description of what the used item does.
+     * @param nameOfItem as String
+     * @return String with the description.
+     */
+    public String useItem(String nameOfItem)
+    {
+        String textToReturn = "";
+        
+        if(nameOfItem.equals("planks"))
+        {
+            textToReturn = "You place the planks over the chasim. "
+                    + "\nThe makeshift brigde is fragile, but it will get you over safe.\n";
+        }
+        else if(nameOfItem.equals("oldKey"))
+        {
+            textToReturn = "As you use the oldKey on the door, you hear a loud click."
+                    + "\nThe door is now open.\n";
+        }
+        
+        return textToReturn;
+    }
 }

@@ -7,6 +7,8 @@ import be.Item;
 import bll.Parser;
 import bll.CommandWord;
 import bll.Command;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,15 +32,17 @@ public class Game
 
     private Parser parser;
     private Player player;
+    private List<Room> lockedRooms;
 
     /**
      * Create the game and initialise its internal map.
      */
     public Game()
     {
-        player = new Player("Rasmus", 10);
-        createRooms();
+        player = new Player("Rasmus", 10);        
         parser = new Parser();
+        lockedRooms = new ArrayList<>();
+        createRooms();
     }
 
     /**
@@ -49,13 +53,13 @@ public class Game
         Room startArea, firstDoorHall, storage, chasim, alcove, mainHall, kitchen;
 
         // create the rooms
-        startArea = new Room("in a dimlight room. There's a skeleton next to you", false);
-        firstDoorHall = new Room("in a big dusty area. There's a large old door. \nIt looks heavy", false);
-        storage = new Room("in a small dirty room. It appears to be a storage.", false);
-        chasim = new Room("in a narrow room. There's a chasim dividing it.", false);
-        alcove = new Room("in what appears to be an old study. "
+        startArea = new Room("startArea", "in a dimlight room. There's a skeleton next to you", false);
+        firstDoorHall = new Room("firstDoorHall", "in a big dusty area. There's a large old door. \nIt looks heavy", false);
+        storage = new Room("storage", "in a small dirty room. It appears to be a storage.", false);
+        chasim = new Room("chasim", "in a narrow room. There's a chasim dividing it.", false);
+        alcove = new Room("alcove", "in what appears to be an old study. "
                 + "\nStuff is lying around. in no apparent order. \nSo untidy.", true);
-        mainHall = new Room("in a large room. There's a long table in the middle."
+        mainHall = new Room("mainHall", "in a large room. There's a long table in the middle."
                 + "\nThe table is set as a mighty feast is about to take place."
                 + "\nSeveral skulls are displayed in the room.", true);
 //        
@@ -75,6 +79,14 @@ public class Game
          storage.createItem("planks", "Long sturdy planks. \nSeems able to carry a person", 6, false);
          storage.createItem("nails", "Old rusty nails. \nSome are bend, others broken", 0, false);
          alcove.createItem("oldKey", "Old keys. Nothing speciel.", 0, false);
+         
+         //Set the keys for all of the locked rooms.
+         firstDoorHall.setLockAndKey(firstDoorHall, "oldKey");
+         chasim.setLockAndKey(chasim, "planks");
+         
+         //Puts all the locked rooms in a List to keep track of them.
+         lockedRooms.add(alcove);
+         lockedRooms.add(mainHall);
 
         player.setCurrentRoom(startArea);  // start game in startArea
     }
@@ -146,6 +158,8 @@ public class Game
             case DROP:
                 textToReturn = dropItem(command);
                 break;
+            case USE:
+                textToReturn = useItemInIventory(command);
             default:
                 break;
         }
@@ -193,7 +207,7 @@ public class Game
         }
         else if(nextRoom.getRoomIsLocked())
         {
-            text = "You can't go that way yet.\nYou need to doing something first.\n";
+            text = "You can't go that way yet.\nYou need to do something first.\n";
         } else
         {
             player.getPreviousRooms().push(player.getCurrentRoom());
@@ -231,6 +245,8 @@ public class Game
     /**
      * "Quit" was entered. Check the rest of the command to see whether we
      * really quit the game.
+     * 
+     * TODO: Remove. The method is never used.
      *
      * @return true, if this command quits the game, false otherwise.
      */
@@ -357,9 +373,82 @@ public class Game
         return ("You are carrying:\n" + inventoryList
                 + "It all weights " + totalWeight + " kg\n");
     }
+    
+    public String useItemInIventory(Command command)
+    {
+        String textToReturn;
+        //Checks if there is a second word.
+        if (!command.hasSecondWord())
+        {
+            // if there is no second word, we don't know what to use...
+            textToReturn = "Use what?\n";
+            return textToReturn;
+        }
+        
+        Item item = player.getItemFromInventory(command.getSecondWord());
+        if(item != null)
+        {
+            //Check if in the right room.
+            if(player.getCurrentRoom().checkLockAndKey(player.getCurrentRoom(), item.getName()))
+            {
+                //Use Item.
+                textToReturn = item.useItem(command.getSecondWord());
+                //Remove Item from inventory.
+                textToReturn += player.removeItemFromInventroy(command.getSecondWord()).getName()
+                        + " was removed from your inventory.\n";
+                //Unlock the room.
+                unlockRoom(command.getSecondWord());
+                
+            }
+            else
+            {
+                textToReturn = "That item has no effect here.\n";
+            }
+        }
+        else
+        {
+            textToReturn = "You do not have that item in your inventory.\n";
+        }
+        return textToReturn;
+    }
+    
+    /**
+     * Finds the room that's unlocked by the specific key and unlocks it.
+     * @param nameOfKey as String.
+     */
+    private void unlockRoom(String nameOfKey)
+    {
+        Room roomToUnlock;
+        if(nameOfKey.equals("oldKey"))
+        {
+            for(int i = 0; i < lockedRooms.size(); i++)
+            {
+                if(lockedRooms.get(i).getName().equals("mainHall"))
+                {
+                    roomToUnlock = lockedRooms.get(i);
+                    roomToUnlock.setRoomIsLocked(false);
+                }
+            }
+        } 
+        else if(nameOfKey.equals("planks"))
+        {
+            for(int i = 0; i < lockedRooms.size(); i++)
+            {
+                if(lockedRooms.get(i).getName().equals("alcove"))
+                {
+                    roomToUnlock = lockedRooms.get(i);
+                    roomToUnlock.setRoomIsLocked(false);
+                }
+            }
+        }
+    }
 
     /**
      * Attempts to eat the given Item.
+     * 
+     * 
+     * TODO: remove entire method. It is not used.
+     * 
      *
      * @param command
      */

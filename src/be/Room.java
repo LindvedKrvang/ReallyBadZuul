@@ -28,16 +28,22 @@ public class Room
     private List<Item> items;
     private boolean itemInRoom = false;
     private boolean roomIsLocked;
+    private Room roomToUseKeyIn;
+    private String keyToBeUsedInLockedRoom;
+    private String nameOfRoom;
     
     
     /**
      * Create a room described "description". Initially, it has no exits.
      * "description" is something like "a kitchen" or "an open court yard".
      *
+     * @param name The name of the room
      * @param description The room's description.
+     * @param locked True if that direction is blocked and needs to be unlocked.
      */
-    public Room(String description, boolean locked)
+    public Room(String name, String description, boolean locked)
     {
+        this.nameOfRoom = name;
         this.description = description;
         exits = new HashMap<>();
         items = new ArrayList<>();
@@ -50,11 +56,37 @@ public class Room
      *
      * @param direction The direction of the exit.
      * @param neighbor The room in the given direction.
-     * @param locked True if that direction is blocked and needs to be unlocked.
      */
     public void setExits(String direction, Room neighbor)
     {
         exits.put(direction, neighbor);
+    }
+    
+    /**
+     * Sets the two identfiers to unlock a room.
+     * @param lockedRoom The room which the key should be used in.
+     * @param keyToOpen The key which to open the specified room.
+     */
+    public void setLockAndKey(Room lockedRoom, String keyToOpen)
+    {
+        roomToUseKeyIn = lockedRoom;
+        keyToBeUsedInLockedRoom = keyToOpen;
+    }
+    
+    /**
+     * Checks if it's possible to use a specific key in a specific room.
+     * @param lockedRoom the room the key should be used in.
+     * @param keyToOpen the key to use in the room as String.
+     * @return true, the key can be used in the room. False if not.
+     */
+    public boolean checkLockAndKey(Room lockedRoom, String keyToOpen)
+    {
+        boolean canBeUnlocked = false;
+        if(roomToUseKeyIn == lockedRoom && keyToBeUsedInLockedRoom.equals(keyToOpen))
+        {
+            canBeUnlocked = true;
+        }
+        return canBeUnlocked;
     }
 
     /**
@@ -224,10 +256,19 @@ public class Room
     
     /**
      * Set the roomIsLocked.
-     * @param open Boolean - True to unlock. False to lock.
+     * @param open Boolean - False to unlock. True to lock.
      */
     public void setRoomIsLocked(boolean open)
     {
         roomIsLocked = open;
+    }
+    
+    /**
+     * Gets the name of the room.
+     * @return Name as String.
+     */
+    public String getName()
+    {
+        return nameOfRoom;
     }
 }

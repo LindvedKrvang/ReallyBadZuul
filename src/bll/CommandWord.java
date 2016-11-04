@@ -14,7 +14,8 @@ public enum CommandWord
 {
     //A value for each command word, plus one for unrecognized.
     // commands.
-    GO("go"), HELP("help"), UNKOWN("?"), BACK("back"), TAKE("take"), DROP("drop");
+    GO("go"), HELP("help"), UNKOWN("?"), BACK("back"), TAKE("take"), DROP("drop"),
+    USE("use");
     
     //The Command String.
     private String commandString;
