@@ -49,15 +49,15 @@ public class Game
         Room startArea, firstDoorHall, storage, chasim, alcove, mainHall, kitchen;
 
         // create the rooms
-        startArea = new Room("in a dimlight room. There's a skeleton next to you");
-        firstDoorHall = new Room("in a big dusty area. There's a large old door. \nIt looks heavy");
-        storage = new Room("in a small dirty room. It appears to be a storage.");
-        chasim = new Room("in a narrow room. There's a chasim dividing it.");
+        startArea = new Room("in a dimlight room. There's a skeleton next to you", false);
+        firstDoorHall = new Room("in a big dusty area. There's a large old door. \nIt looks heavy", false);
+        storage = new Room("in a small dirty room. It appears to be a storage.", false);
+        chasim = new Room("in a narrow room. There's a chasim dividing it.", false);
         alcove = new Room("in what appears to be an old study. "
-                + "\nStuff is lying around. in no apparent order. \nSo untidy.");
+                + "\nStuff is lying around. in no apparent order. \nSo untidy.", true);
         mainHall = new Room("in a large room. There's a long table in the middle."
                 + "\nThe table is set as a mighty feast is about to take place."
-                + "\nSeveral skulls are displayed in the room.");
+                + "\nSeveral skulls are displayed in the room.", true);
 //        
 
          //initialise room exits
@@ -135,7 +135,7 @@ public class Game
                 textToReturn += printHelp();
                 break;
             case GO:
-                goRoom(command);
+                textToReturn = goRoom(command);
                 break;
             case BACK:
                 textToReturn = goBack(command);
@@ -186,11 +186,11 @@ public class Game
      */
     private String goRoom(Command command)
     {
-        String text = "";
+        String text;
         if (!command.hasSecondWord())
         {
             // if there is no second word, we don't know where to go...
-            text = "Go where?";
+            text = "Go where?\n";
             return text;
         }
 
@@ -201,11 +201,16 @@ public class Game
 
         if (nextRoom == null)
         {
-            text = "There is no door!";
+            text = "There is no door!\n";
+        }
+        else if(nextRoom.getRoomIsLocked())
+        {
+            text = "You can't go that way yet.\nYou need to doing something first.\n";
         } else
         {
             player.getPreviousRooms().push(player.getCurrentRoom());
             player.setCurrentRoom(nextRoom);
+            text = "You move to the next room.\n";
         }
         return text;
     }
@@ -216,7 +221,7 @@ public class Game
      */
     private String goBack(Command command)
     {
-        String text = "";
+        String text;
         if (command.hasSecondWord())
         {
             // if there is no second word, we don't know where to go...
@@ -227,6 +232,7 @@ public class Game
         if (!player.getPreviousRooms().isEmpty())
         {
             player.setCurrentRoom((Room) player.getPreviousRooms().pop());
+            text = "You move back the way you came.\n";
         } else
         {
             text = "You haven't left the first room yet.";

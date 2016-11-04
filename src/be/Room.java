@@ -25,9 +25,9 @@ public class Room
 
     private String description;
     private HashMap<String, Room> exits;
-    private HashMap<String, Boolean> blockedExits;
     private List<Item> items;
     private boolean itemInRoom = false;
+    private boolean roomIsLocked;
     
     
     /**
@@ -36,11 +36,12 @@ public class Room
      *
      * @param description The room's description.
      */
-    public Room(String description)
+    public Room(String description, boolean locked)
     {
         this.description = description;
         exits = new HashMap<>();
         items = new ArrayList<>();
+        roomIsLocked = locked;
     }
 
     /**
@@ -51,10 +52,9 @@ public class Room
      * @param neighbor The room in the given direction.
      * @param locked True if that direction is blocked and needs to be unlocked.
      */
-    public void setExits(String direction, Room neighbor, boolean locked)
+    public void setExits(String direction, Room neighbor)
     {
         exits.put(direction, neighbor);
-        blockedExits.put(direction, locked);
     }
 
     /**
@@ -156,18 +156,6 @@ public class Room
         }
         return returnString;
     }
-    
-    public boolean isExitBlocked()
-    {
-        Set<String> keys = blockedExits.keySet();
-        for(String blocked : keys)
-        {
-            if(keys.equals(true))
-            {
-                
-            }
-        }
-    }
 
     /**
      * Retun a long description of this room, of the form: You are in the
@@ -223,5 +211,23 @@ public class Room
             }
         }
         return itemIsThere;
+    }
+    
+    /**
+     * Return if the room is locked or not.
+     * @return True if yes, false if no.
+     */
+    public boolean getRoomIsLocked()
+    {
+        return roomIsLocked;
+    }
+    
+    /**
+     * Set the roomIsLocked.
+     * @param open Boolean - True to unlock. False to lock.
+     */
+    public void setRoomIsLocked(boolean open)
+    {
+        roomIsLocked = open;
     }
 }
