@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="630.0" prefWidth="821.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.GameController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" />
+      <Pane layoutX="15.0" layoutY="54.0" prefHeight="514.0" prefWidth="791.0">
+         <children>
+            <TextArea fx:id="txtAGeneralInfo" layoutX="14.0" layoutY="14.0" prefHeight="483.0" prefWidth="315.0" style="-fx-background-radius: 25, 25, 25, 25;" />
+            <TextArea fx:id="txtARoomInfo" layoutX="346.0" layoutY="41.0" prefHeight="156.0" prefWidth="425.0" />
+            <TextArea fx:id="txtAItemInfo" layoutX="346.0" layoutY="271.0" prefHeight="226.0" prefWidth="231.0" />
+            <TextArea fx:id="txtAInventory" layoutX="599.0" layoutY="271.0" prefHeight="226.0" prefWidth="175.0" style="-fx-background-radius: 25, 25, 25, 25;" />
+            <Label layoutX="346.0" layoutY="244.0" text="Items in room:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="599.0" layoutY="244.0" text="Inventory:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="346.0" layoutY="14.0" text="Room:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <TextField fx:id="txtCommands" layoutX="279.0" layoutY="568.0" onKeyPressed="#goButton" prefHeight="46.0" prefWidth="263.0" style="-fx-background-radius: 25, 25, 25, 25;" />
+      <Label alignment="CENTER" layoutX="218.0" layoutY="14.0" prefHeight="40.0" prefWidth="385.0" text="World of Zuul">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
